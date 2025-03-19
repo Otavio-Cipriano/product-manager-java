@@ -18,7 +18,7 @@ public class Sale {
     private LocalDateTime saleAt;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SaleItem> items;
-    @Column(scale = 2)
+    @Column(nullable = false)
     private BigDecimal valueTotal;
 
     public Long getId() {

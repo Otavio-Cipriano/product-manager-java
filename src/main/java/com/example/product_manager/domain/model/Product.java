@@ -11,15 +11,20 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private Long quantity;
-    @Column(scale = 2)
+
+    @Column(nullable = false)
     private BigDecimal price;
 
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
     private LocalDateTime createdAt;
     private String category;
+
+    private Long minOnStock;
 
     public Long getId() {
         return id;
@@ -62,4 +67,11 @@ public class Product {
         this.category = category;
     }
 
+    public Long getMinOnStock() {
+        return minOnStock;
+    }
+
+    public void setMinOnStock(Long minOnStock) {
+        this.minOnStock = minOnStock;
+    }
 }

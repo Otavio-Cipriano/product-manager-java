@@ -23,4 +23,20 @@ public class SaleItemId implements Serializable {
     public int hashCode() {
         return Objects.hash(saleId, productId);
     }
+
+    public Long getSaleId() {
+        return saleId;
+    }
+
+    public void setSaleId(Long saleId) {
+        this.saleId = saleId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 }

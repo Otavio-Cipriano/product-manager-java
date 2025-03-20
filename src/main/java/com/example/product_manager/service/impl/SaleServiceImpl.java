@@ -9,6 +9,7 @@ import com.example.product_manager.domain.repository.SaleRepository;
 import com.example.product_manager.service.SaleService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +30,28 @@ public class SaleServiceImpl implements SaleService {
     public Sale create(Sale saleToCreate) {
         Sale sale = new Sale();
         List<SaleItem> saleItems = new ArrayList<>();
+        BigDecimal calculatedValueTotal = BigDecimal.ZERO;
+
         if(saleToCreate.getItems() == null || saleToCreate.getItems().isEmpty()){
             throw new IllegalArgumentException("There's no items on sale");
         }
+
         for (SaleItem item : saleToCreate.getItems()){
             Product product = productRepository.findById(item.getProduct().getId())
                     .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
             if(!product.getPrice().equals(item.getUnitaryPrice())){
                 throw new IllegalArgumentException("Product's Price of" + product.getName() + "não coincide");
             }
+
             if (product.getQuantity() < item.getQuantity()){
                 throw new IllegalArgumentException("Not enough items on stock for this sale");
+            }
+
+            calculatedValueTotal = calculatedValueTotal.add(item.getUnitaryPrice().multiply(new BigDecimal(item.getQuantity())));
+
+            if (!calculatedValueTotal.equals(saleToCreate.getValueTotal())){
+                throw new RuntimeException("Total value not match with items sum");
             }
 
             SaleItem saleItem = new SaleItem();
@@ -47,6 +59,7 @@ public class SaleServiceImpl implements SaleService {
             saleItem.setQuantity(item.getQuantity());
             saleItem.setUnitaryPrice(product.getPrice());
 
+            productRepository.decreaseStock(item.getId(), item.getQuantity());
             saleItems.add(saleItem);
         }
 

@@ -24,7 +24,7 @@ public class SaleItem {
     @JsonIgnore
     private Sale sale;
 
-    private int quantity;
+    private Long quantity;
 
     @Column(precision = 20, scale = 2)
     private BigDecimal unitaryPrice;
@@ -46,7 +46,7 @@ public class SaleItem {
         return sale;
     }
 
-    public int getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
@@ -62,7 +62,7 @@ public class SaleItem {
         this.sale = sale;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 
